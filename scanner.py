@@ -1,17 +1,17 @@
 import socket
 import threading
 
-
+# Limit thread number
 thread_limit = threading.Semaphore(20)
 def scan(subdomain):
     with thread_limit:
-        target_domain = 'klaviyo.com'
+        target_domain = 'google.com'
         full_url = f'{subdomain}.{target_domain}'
 
+        # Get DNS Record A 
         try:
             ip = socket.gethostbyname(full_url)
             print(f"[FOUND] {full_url} -> {ip}")
-            #scan port for {ip}
             
         except socket.gaierror as e:
             pass
@@ -31,6 +31,7 @@ wordlist = [
 "internal", "intranet", "corp", "staff", "secure", "security", 
 "auth", "sso", "oauth", "db", "database", "sql", "mysql", "oracle"]
 
+# Start thread
 for subdomain in wordlist:
     t = threading.Thread(target=scan, args=(subdomain,))
     t.start()
